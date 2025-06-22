@@ -17,6 +17,10 @@ Route::resource('posts', PostController::class)
 
 Route::resource('rest', RestTestController::class)->names('restTest');
 
+Route::get('process-video', 'DiggingDeeperController@processVideo')->name('digging_deeper.processVideo');
+
+Route::get('prepare-catalog', 'DiggingDeeperController@prepareCatalog')->name('digging_deeper.prepareCatalog');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
