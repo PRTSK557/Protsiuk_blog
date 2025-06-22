@@ -10,6 +10,8 @@ use App\Http\Requests\BlogPostUpdateRequest;
 use Illuminate\Support\Str;
 use App\Models\BlogPost;
 use App\Http\Requests\BlogPostCreateRequest;
+use App\Jobs\BlogPostAfterCreateJob;
+use App\Jobs\BlogPostAfterDeleteJob;
 
 class PostController extends BaseController
 {
@@ -58,11 +60,14 @@ class PostController extends BaseController
     public function store(BlogPostCreateRequest $request)
     {
         $data = $request->input();
-        $data['content_html'] = \Str::markdown($data['content_raw']); // або strip_tags / purified version
+        $data['content_html'] = \Str::markdown($data['content_raw']);
 
         $item = (new BlogPost())->create($data);
 
         if ($item) {
+            // Виклик Job через статичний метод dispatch()
+            BlogPostAfterCreateJob::dispatch($item);
+
             return redirect()
                 ->route('blog.admin.posts.edit', [$item->id])
                 ->with(['success' => 'Успішно збережено']);
@@ -72,6 +77,7 @@ class PostController extends BaseController
                 ->withInput();
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -131,6 +137,7 @@ class PostController extends BaseController
         $result = BlogPost::destroy($id); // м'яке видалення
 
         if ($result) {
+            BlogPostAfterDeleteJob::dispatch($id)->delay(20);
             return redirect()
                 ->route('blog.admin.posts.index')
                 ->with(['success' => "Запис id[$id] видалено"]);
