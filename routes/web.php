@@ -3,6 +3,8 @@
 use App\Http\Controllers\Blog\Admin\CategoryController;
 use App\Http\Controllers\Blog\Admin\PostController;
 use App\Http\Controllers\RestTestController;
+use App\Http\Controllers\DiggingDeeperController;  // Додано
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,4 +44,10 @@ Route::group($groupData, function () {
     Route::resource('posts', PostController::class)
         ->except(['show'])
         ->names('blog.admin.posts');
+});
+
+// Додаємо групу маршрутів для digging_deeper
+Route::group(['prefix' => 'digging_deeper'], function () {
+    Route::get('collections', [DiggingDeeperController::class, 'collections'])
+        ->name('digging_deeper.collections');
 });
