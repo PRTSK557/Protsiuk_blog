@@ -4,12 +4,6 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class CoreRepository.
- * Репозиторій для роботи з сутністю.
- * Може видавати набори даних.
- * Не може змінювати та створювати сутності.
- */
 abstract class CoreRepository
 {
     /**
@@ -17,19 +11,20 @@ abstract class CoreRepository
      */
     protected $model;
 
-    /** CoreRepository constructor */
-    public function __construct()
-    {
-        $this->model = app($this->getModelClass()); //app('App\Models\BlogCategory')
-    }
-
     /**
-     *  @return mixed
+     * Метод повертає клас моделі
      */
     abstract protected function getModelClass();
 
+    public function __construct()
+    {
+        $this->model = app($this->getModelClass());
+    }
+
     /**
-     *  @return Model|\Illuminate\Foundation\Application|mixed
+     * Початкові умови для запитів
+     *
+     * @return Model
      */
     protected function startConditions()
     {

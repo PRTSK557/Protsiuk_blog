@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Blog;
+namespace App\Http\Controllers;
 
-use App\Models\BlogPost;
 use Illuminate\Http\Request;
 
-class PostController extends BaseController
+class BlogAdminPostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $items = BlogPost::all();
-        return view('blog.posts.index', compact('items'));
+        //
     }
 
     /**
