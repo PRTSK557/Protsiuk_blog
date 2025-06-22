@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
-use App\Http\Controllers\Blog\BaseController as GuestBaseController;
+use App\Http\Controllers\Controller;
 
-abstract class BaseController extends GuestBaseController
+class BaseController extends Controller
 {
-    // Тут можна розширювати спільну логіку для адмін-контролерів
+    /**
+     * BaseController constructor
+     */
+    public function __construct()
+    {
+        // Ініціалізація загальних елементів адмінки
+    }
 }
