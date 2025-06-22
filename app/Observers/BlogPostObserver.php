@@ -41,6 +41,18 @@ class BlogPostObserver
             $blogPost->slug = \Str::slug($blogPost->title);
         }
     }
+
+    public function creating(BlogPost $blogPost)
+    {
+        $this->setPublishedAt($blogPost);
+        $this->setSlug($blogPost);
+        $this->setUser($blogPost); // <<< важливо
+    }
+
+    protected function setUser(BlogPost $blogPost)
+    {
+        $blogPost->user_id = auth()->id() ?? BlogPost::UNKNOWN_USER;
+    }
     /**
      * Handle the BlogPost "created" event.
      */

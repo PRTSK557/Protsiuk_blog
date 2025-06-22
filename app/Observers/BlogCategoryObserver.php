@@ -6,14 +6,18 @@ use App\Models\BlogCategory;
 
 class BlogCategoryObserver
 {
+
     /**
      * Обробка перед створенням запису.
      *
      * @param  BlogCategory  $blogCategory
      */
-    public function creating(BlogCategory $blogCategory)
+    public function creating(BlogPost $blogPost)
     {
-        $this->setSlug($blogCategory);
+        $this->setPublishedAt($blogPost);
+        $this->setSlug($blogPost);
+        $this->setHtml($blogPost);
+        $this->setUser($blogPost);
     }
 
     public function updating(BlogCategory $blogCategory)
@@ -71,4 +75,18 @@ class BlogCategoryObserver
     {
         //
     }
+
+
+    protected function setHtml(BlogPost $blogPost)
+    {
+        if ($blogPost->isDirty('content_raw')) {
+            $blogPost->content_html = $blogPost->content_raw; // тут можна Markdown конвертацію
+        }
+    }
+
+    protected function setUser(BlogPost $blogPost)
+    {
+        $blogPost->user_id = auth()->id() ?? BlogPost::UNKNOWN_USER;
+    }
+
 }
